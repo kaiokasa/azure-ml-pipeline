@@ -99,6 +99,7 @@ functions/    function_app.py (dispatcher, worker, recent), pipeline/ (validatio
 web/          index.html, app.js, style.css, config.js (généré au déploiement)
 infra/        config.sh, 00-check-region.sh, 01-setup.sh, 02-roles.sh, 03-eventgrid.sh, demo.sh, 99-cleanup.sh
 samples/      fichiers de démonstration valides et invalides
+loadtest/     burst.sh (rafale de fichiers), locustfile.py, analysis.kql (bonus test de charge)
 .github/workflows/  ci.yml, deploy.yml
 docs/         kql-queries.kql, cost-report.md, time-log.md, demo-script.md, screenshots/
 ```
@@ -315,6 +316,20 @@ Autres captures : [workflows GitHub Actions](docs/screenshots/github-actions.jpg
 | 5 | Message JSON invalide dans `inference-requests` | Après 5 tentatives, dans `inference-requests-poison` à 16:17:57 | [demo-5](docs/screenshots/demo-5-file-poison.jpg) |
 | 6 | – | `pipeline.errors` = 10 (`KeyError`), `pipeline.rejected` = 6 | [demo-6](docs/screenshots/demo-6-metriques.jpg) |
 | 7 | – | Alerte `alert-pipeline-errors` **Fired** à 16:18 | [demo-7](docs/screenshots/demo-7-alerte-fired.jpg) |
+
+### Bonus : test de charge
+
+[Rapport complet](docs/loadtest/README.md).
+
+- **Rafale de 100 fichiers (5 000 avis) :**
+  - 100/100 traités en ≈ 32 s, API au repos (0 réplica) au départ ;
+  - 0 erreur, 0 doublon ;
+  - Functions Flex : 21 instances pour le *dispatcher*, 8 pour le *worker*.
+- **Locust, 20 utilisateurs pendant 60 s :**
+  - 1 632 requêtes, 0 échec, ≈ 30 req/s ;
+  - latence côté serveur p50 6 ms, p95 38 ms ;
+  - Container Apps passe à 2 réplicas.
+- **Goulot d’étranglement :** le démarrage à froid de l’API (≈ 15 s), compromis assumé pour garder un coût nul au repos.
 
 ## 10. CI/CD et sécurité
 
