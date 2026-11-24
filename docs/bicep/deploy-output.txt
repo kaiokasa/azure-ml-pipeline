@@ -1,0 +1,31 @@
+Image API : ghcr.io/kaiokasa/azure-ml-pipeline/api:ca7f953642654ffe125afef48ff227670f877f35
+{
+  "apiUrl": {
+    "type": "String",
+    "value": "https://api-mlpipe.ashyflower-543a12e0.germanywestcentral.azurecontainerapps.io"
+  },
+  "dashboardUrl": {
+    "type": "String",
+    "value": "https://stmlpipepipe.z1.web.core.windows.net/"
+  },
+  "functionHost": {
+    "type": "String",
+    "value": "func-mlpipe.azurewebsites.net"
+  },
+  "functionPrincipalId": {
+    "type": "String",
+    "value": "6b645294-f321-4e9b-bbea-f4a5b15ed2ea"
+  },
+  "githubClientId": {
+    "type": "String",
+    "value": "0c36ec40-d2ab-4bc5-a0dd-ec9b436736f6"
+  }
+}
+There are no credentials provided in your command and environment, we will query for account key for your storage account.
+It is recommended to provide --connection-string, --account-key or --sas-token in your command as credentials.
+
+You also can add `--auth-mode login` in your command to use Azure Active Directory (Azure AD) for authorization if your login account is assigned required RBAC roles.
+For more information about RBAC roles in storage, visit https://learn.microsoft.com/azure/storage/common/storage-auth-aad-rbac-cli.
+
+In addition, setting the corresponding environment variables can avoid inputting credentials in your command. Please use --help to get more information about environment variable usage.
+Site web statique activé : https://stmlpipepipe.z1.web.core.windows.net/

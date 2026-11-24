@@ -98,6 +98,7 @@ api/          app/ (FastAPI), tests/ (pytest), Dockerfile multi-étapes, require
 functions/    function_app.py (dispatcher, worker, recent), pipeline/ (validation, clients), host.json, tests/
 web/          index.html, app.js, style.css, config.js (généré au déploiement)
 infra/        config.sh, 00-check-region.sh, 01-setup.sh, 02-roles.sh, 03-eventgrid.sh, demo.sh, 99-cleanup.sh
+infra/bicep/  main.bicep, main.bicepparam, deploy.sh (bonus IaC : tout le socle en une commande)
 samples/      fichiers de démonstration valides et invalides
 loadtest/     burst.sh (rafale de fichiers), locustfile.py, analysis.kql (bonus test de charge)
 .github/workflows/  ci.yml, deploy.yml
@@ -330,6 +331,20 @@ Autres captures : [workflows GitHub Actions](docs/screenshots/github-actions.jpg
   - latence côté serveur p50 6 ms, p95 38 ms ;
   - Container Apps passe à 2 réplicas.
 - **Goulot d’étranglement :** le démarrage à froid de l’API (≈ 15 s), compromis assumé pour garder un coût nul au repos.
+
+### Bonus : Infrastructure as Code (Bicep)
+
+Tout le socle (29 ressources) est décrit dans [`infra/bicep/main.bicep`](infra/bicep/main.bicep) et redéployable en une commande : `bash infra/bicep/deploy.sh`.
+
+Validation sur l’environnement réel :
+
+- **what-if** : 0 création, 0 suppression ;
+- **déploiement réel** : 2 min ;
+- **pipeline retesté** : fichier traité en 27 s.
+
+Le déploiement Bicep a aussi supprimé les dernières chaînes de connexion de la Function App : stockage et paquet de déploiement passent par identité managée.
+
+[Détails](infra/bicep/README.md).
 
 ## 10. CI/CD et sécurité
 

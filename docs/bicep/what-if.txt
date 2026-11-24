@@ -1,0 +1,198 @@
+Image API : ghcr.io/kaiokasa/azure-ml-pipeline/api:ca7f953642654ffe125afef48ff227670f877f35
+Note: The result may contain false positive predictions (noise).
+You can help us improve the accuracy of the result by opening an issue here: https://aka.ms/WhatIfIssues
+NOTICE! - Want to get What-if without noise? Move to Deployment Stacks What-If https://aka.ms/stackswhatifGA
+
+Resource and property changes are indicated with these symbols:
+  - Delete
+  + Create
+  ~ Modify
+  = Nochange
+  * Ignore
+  x Noeffect
+
+The deployment will update the following scope:
+
+Scope: /subscriptions/1f9d98b5-3828-402b-8e51-3c9edfad65be/resourceGroups/rg-projet-mlpipe
+
+  ~ Microsoft.App/containerApps/api-mlpipe [2024-03-01]
+    - properties.runningStatus: "Running"
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.App/managedEnvironments/cae-mlpipe [2024-03-01]
+    - properties.peerAuthentication:
+
+        mtls.enabled: false
+
+    - properties.peerTrafficConfiguration:
+
+        encryption.enabled: false
+
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+    ~ properties.appLogsConfiguration.logAnalyticsConfiguration.customerId: "3bce9368-95a3-4e7b-9c28-9b2d25336f32" => "[reference('/subscriptions/1f9d98b5-3828-402b-8e51-3c9edfad65be/resourceGroups/rg-projet-mlpipe/providers/Microsoft.OperationalInsights/workspaces/log-mlpipe', '2023-09-01').customerId]"
+
+  ~ Microsoft.Consumption/budgets/budget-mlpipe [2023-05-01]
+    ~ properties.timePeriod.endDate:   "2027-11-01T00:00:00Z" => "2027-11-01"
+    ~ properties.timePeriod.startDate: "2026-11-01T00:00:00Z" => "2026-11-01"
+
+  ~ Microsoft.DocumentDB/databaseAccounts/cosmos-mlpipe [2024-05-15]
+    - properties.analyticalStorageConfiguration:
+
+        schemaType: "WellDefined"
+
+    - properties.defaultIdentity: "FirstPartyIdentity"
+    - properties.sqlEndpoint:     "https://cosmos-mlpipe.documents.azure.com:443/"
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.DocumentDB/databaseAccounts/cosmos-mlpipe/sqlDatabases/pipeline [2024-05-15]
+    + properties.options:
+
+        throughput: 400
+
+
+  ~ Microsoft.DocumentDB/databaseAccounts/cosmos-mlpipe/sqlDatabases/pipeline/containers/inferences [2024-05-15]
+    - properties.resource.conflictResolutionPolicy.conflictResolutionPath: "/_ts"
+    - properties.resource.indexingPolicy.automatic:                        true
+    - properties.resource.indexingPolicy.excludedPaths: [
+        0:
+
+          path: "/"_etag"/?"
+
+      ]
+    - properties.resource.indexingPolicy.includedPaths: [
+        0:
+
+          path: "/*"
+
+      ]
+
+  ~ Microsoft.Insights/actionGroups/ag-mlpipe [2023-01-01]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.Insights/components/appi-mlpipe [2020-02-02]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.Insights/scheduledQueryRules/alert-pipeline-errors [2023-03-15-preview]
+    - properties.checkWorkspaceAlertsStorageConfigured: false
+    - properties.skipQueryValidation:                   false
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.ManagedIdentity/userAssignedIdentities/id-github-mlpipe [2023-01-31]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.OperationalInsights/workspaces/log-mlpipe [2023-09-01]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe [2023-05-01]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default [2023-05-01]
+    - properties.deleteRetentionPolicy:
+
+        allowPermanentDelete: false
+        enabled:              false
+
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default/containers/app-package-funcmlpipe-7636324 [2023-05-01]
+    - properties.defaultEncryptionScope:      "$account-encryption-key"
+    - properties.denyEncryptionScopeOverride: false
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default/containers/input [2023-05-01]
+    - properties.defaultEncryptionScope:      "$account-encryption-key"
+    - properties.denyEncryptionScopeOverride: false
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default/containers/models [2023-05-01]
+    - properties.defaultEncryptionScope:      "$account-encryption-key"
+    - properties.denyEncryptionScopeOverride: false
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default/containers/output [2023-05-01]
+    - properties.defaultEncryptionScope:      "$account-encryption-key"
+    - properties.denyEncryptionScopeOverride: false
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/blobServices/default/containers/rejected [2023-05-01]
+    - properties.defaultEncryptionScope:      "$account-encryption-key"
+    - properties.denyEncryptionScopeOverride: false
+
+  ~ Microsoft.Storage/storageAccounts/stmlpipepipe/queueServices/default [2023-05-01]
+    - properties:
+
+        logging.delete:                  false
+        logging.read:                    false
+        logging.retentionPolicy.enabled: false
+        logging.version:                 "1.0"
+        logging.write:                   false
+
+
+  ~ Microsoft.Web/serverfarms/ASP-rgprojetmlpipe-ea9d [2024-04-01]
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+    x sku.tier: "FlexConsumption"
+
+  ~ Microsoft.Web/sites/func-mlpipe [2024-04-01]
+    + properties.siteConfig.cors:
+
+        allowedOrigins: [
+          0: "[format('https://{0}', replace(replace(reference('/subscriptions/1f9d98b5-3828-402b-8e51-3c9edfad65be/resourceGroups/rg-projet-mlpipe/providers/Microsoft.Storage/storageAccounts/stmlpipepipe', '2023-05-01').primaryEndpoints.web, 'https://', ''), '/', ''))]"
+        ]
+
+    + properties.siteConfig.localMySqlEnabled:                             false
+    + properties.siteConfig.minTlsVersion:                                 "1.2"
+    + properties.siteConfig.netFrameworkVersion:                           "v4.6"
+    + tags:
+
+        equipe: "mlpipe"
+        projet: "dscc"
+
+    ~ properties.functionAppConfig.deployment.storage.authentication.type: "StorageAccountConnectionString" => "SystemAssignedIdentity"
+    ~ properties.functionAppConfig.deployment.storage.value:               "https://stmlpipepipe.blob.core.windows.net/app-package-funcmlpipe-7636324" => "[format('{0}{1}', reference('/subscriptions/1f9d98b5-3828-402b-8e51-3c9edfad65be/resourceGroups/rg-projet-mlpipe/providers/Microsoft.Storage/storageAccounts/stmlpipepipe', '2023-05-01').primaryEndpoints.blob, 'app-package-funcmlpipe-7636324')]"
+    ~ properties.httpsOnly:                                                false => true
+
+  = Microsoft.ManagedIdentity/userAssignedIdentities/id-github-mlpipe/federatedIdentityCredentials/github-production [2023-01-31]
+  = Microsoft.ManagedIdentity/userAssignedIdentities/id-github-mlpipe/federatedIdentityCredentials/github-production-ids [2023-01-31]
+  = Microsoft.Storage/storageAccounts/stmlpipepipe/providers/Microsoft.EventGrid/eventSubscriptions/blob-to-dispatcher [2024-06-01-preview]
+  = Microsoft.Storage/storageAccounts/stmlpipepipe/queueServices/default/queues/inference-requests [2023-05-01]
+  = Microsoft.Storage/storageAccounts/stmlpipepipe/queueServices/default/queues/inference-requests-poison [2023-05-01]
+  * Microsoft.EventGrid/systemTopics/stmlpipepipe-925f3215-9fee-4a7d-b19f-d76e397adb69
+  * microsoft.alertsmanagement/smartDetectorAlertRules/Failure Anomalies - appi-mlpipe
+  * microsoft.insights/actiongroups/Application Insights Smart Detection
+
+Resource changes: 21 to modify, 5 no change, 3 to ignore.
