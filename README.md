@@ -304,6 +304,18 @@ Erreurs du worker (Q3 bis) : `pipeline.errors` = 5 (`KeyError`, les 5 tentatives
 
 Autres captures : [workflows GitHub Actions](docs/screenshots/github-actions.jpg), [déploiement OIDC réussi](docs/screenshots/github-deploy-oidc.jpg), [budget 25 $](docs/screenshots/budget-25usd.jpg), [Cost analysis J0](docs/screenshots/cost-analysis-j0.jpg).
 
+### Démonstration du 24/11/2026 à 16:16 (résultats attendus et obtenus)
+
+| # | Action (16:16:58) | Résultat obtenu | Capture |
+|---|---|---|---|
+| 1 | Dépôt de `demo-avis-valides.txt` (8 avis) dans `input/` | Tableau de bord : **positif, 91,1 %, 8 avis, 50 % négatifs** (traité à 16:17:27, API réveillée depuis 0 réplica) | [demo-1](docs/screenshots/demo-1-tableau-de-bord.jpg) |
+| 2 | – | `output/demo-avis-valides.json` : résumé + prédiction de chaque ligne | [demo-2](docs/screenshots/demo-2-resultat-output-json.jpg) |
+| 3 | Dépôt de `demo-mauvaise-extension.csv` et `demo-fichier-vide.txt` | Copiés dans `rejected/` avec leur `.reason.json` | [demo-3](docs/screenshots/demo-3-conteneur-rejected.jpg) |
+| 4 | – | Motif : *extension not allowed (expected .txt)* | [demo-4](docs/screenshots/demo-4-motif-de-rejet.jpg) |
+| 5 | Message JSON invalide dans `inference-requests` | Après 5 tentatives, dans `inference-requests-poison` à 16:17:57 | [demo-5](docs/screenshots/demo-5-file-poison.jpg) |
+| 6 | – | `pipeline.errors` = 10 (`KeyError`), `pipeline.rejected` = 6 | [demo-6](docs/screenshots/demo-6-metriques.jpg) |
+| 7 | – | Alerte `alert-pipeline-errors` **Fired** à 16:18 | [demo-7](docs/screenshots/demo-7-alerte-fired.jpg) |
+
 ## 10. CI/CD et sécurité
 
 | Workflow | Déclencheur | Étapes |
