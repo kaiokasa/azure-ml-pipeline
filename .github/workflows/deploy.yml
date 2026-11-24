@@ -42,8 +42,8 @@ jobs:
       - name: Update Container Apps (API) to the image of this commit
         run: |
           IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}/api:${SHA}"
-          az containerapp update -n "$API" -g "$RG" --image "$IMAGE" \
-            --revision-suffix "g${SHA:0:7}" -o none
+          # (no --revision-suffix: not supported on express Container Apps environments)
+          az containerapp update -n "$API" -g "$RG" --image "$IMAGE" -o none
           echo "API_FQDN=$(az containerapp show -n "$API" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)" >> "$GITHUB_ENV"
 
       - name: Deploy the Function App (Flex Consumption, remote build)

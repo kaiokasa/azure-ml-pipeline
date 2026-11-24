@@ -129,6 +129,18 @@ az identity federated-credential create -n github-production --identity-name "$I
   --issuer https://token.actions.githubusercontent.com \
   --subject "repo:$GH_REPO:environment:production" \
   --audiences api://AzureADTokenExchange -o none 2>/dev/null || true
+# Newer GitHub repos send an immutable subject with numeric IDs (repo:owner@<id>/repo@<id>:...);
+# without a matching credential azure/login fails with AADSTS700213. Register that form too.
+if command -v gh >/dev/null 2>&1; then
+  OWNER_ID=$(gh api "repos/$GH_REPO" -q .owner.id 2>/dev/null || true)
+  REPO_ID=$(gh api "repos/$GH_REPO" -q .id 2>/dev/null || true)
+  if [[ -n "$OWNER_ID" && -n "$REPO_ID" ]]; then
+    az identity federated-credential create -n github-production-ids --identity-name "$ID" -g "$RG" \
+      --issuer https://token.actions.githubusercontent.com \
+      --subject "repo:${GH_REPO%%/*}@$OWNER_ID/${GH_REPO##*/}@$REPO_ID:environment:production" \
+      --audiences api://AzureADTokenExchange -o none 2>/dev/null || true
+  fi
+fi
 # Private-repo alternative (section 4.6): uncomment and use workflow_dispatch
 # az identity federated-credential create -n github-main --identity-name "$ID" -g "$RG" \
 #   --issuer https://token.actions.githubusercontent.com --subject "repo:$GH_REPO:ref:refs/heads/main" \
