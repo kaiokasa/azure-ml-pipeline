@@ -120,7 +120,8 @@ az functionapp config appsettings set -n "$FUNC" -g "$RG" -o none --settings \
   "STORAGE__queueServiceUri=https://$ST.queue.core.windows.net" \
   "STORAGE__credential=managedidentity" \
   "COSMOS_ENDPOINT=$COSMOS_EP" "COSMOS_DATABASE=pipeline" "COSMOS_CONTAINER=inferences" \
-  "API_URL=$API_URL" "API_TIMEOUT_SECONDS=45" "MAX_FILE_BYTES=1000000"
+  "API_URL=$API_URL" "API_TIMEOUT_SECONDS=45" "MAX_FILE_BYTES=1000000" \
+  "OTEL_SERVICE_NAME=pipeline-functions"
 az functionapp cors add -n "$FUNC" -g "$RG" --allowed-origins "$WEB_ORIGIN" -o none
 
 echo "== Managed identity for GitHub Actions (OIDC, no Entra ID admin rights needed)"
