@@ -1,0 +1,21 @@
+{
+  "model_version": "1.0.0",
+  "dataset": "UCI Sentiment Labelled Sentences (CC BY 4.0)",
+  "n_train": 2400,
+  "n_test": 600,
+  "seed": 42,
+  "model": {
+    "accuracy": 0.86,
+    "f1": 0.8623,
+    "roc_auc": 0.9241
+  },
+  "baseline_most_frequent": {
+    "accuracy": 0.5,
+    "f1": 0.0,
+    "roc_auc": 0.5
+  },
+  "inference_ms_for_500_lines": 46.1,
+  "model_size_kb": 1133.8,
+  "python": "3.13.11",
+  "scikit_learn": "1.6.1"
+}

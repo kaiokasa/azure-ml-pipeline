@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+extend-exclude = [".venv", "model/data"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM"]
+ignore = ["S101", "S310", "S301", "SIM112"]
+
+[tool.ruff.lint.per-file-ignores]
+"**/tests/**" = ["S", "B"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "pipeline", "function_app"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+pythonpath = ["api", "functions"]

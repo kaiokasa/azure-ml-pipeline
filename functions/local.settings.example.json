@@ -1,0 +1,14 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "STORAGE": "UseDevelopmentStorage=true",
+    "API_URL": "http://localhost:8000",
+    "COSMOS_ENDPOINT": "",
+    "MAX_FILE_BYTES": "1000000"
+  },
+  "Host": {
+    "CORS": "*"
+  }
+}

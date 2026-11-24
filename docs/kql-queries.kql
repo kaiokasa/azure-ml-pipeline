@@ -1,0 +1,56 @@
+// =====================================================================
+// Requêtes KQL - à exécuter dans Application Insights > Journaux
+// (ressource appi-<equipe>, espace de travail log-<equipe>)
+// =====================================================================
+
+// ---------------------------------------------------------------------
+// Q1. Inférences par heure (métrique personnalisée pipeline.inferences)
+// ---------------------------------------------------------------------
+customMetrics
+| where timestamp > ago(24h)
+| where name == "pipeline.inferences"
+| summarize inferences = sum(valueSum) by bin(timestamp, 1h)
+| order by timestamp asc
+| render columnchart
+
+// ---------------------------------------------------------------------
+// Q2. Les 5 fichiers les plus lents (traces structurées "inference_done")
+// ---------------------------------------------------------------------
+traces
+| where timestamp > ago(7d)
+| where message == "inference_done"
+| extend fileName = tostring(customDimensions.fileName),
+         durationMs = todouble(customDimensions.durationMs),
+         modelLatencyMs = todouble(customDimensions.modelLatencyMs),
+         lines = toint(customDimensions.lines)
+| top 5 by durationMs desc
+| project timestamp, fileName, lines, durationMs, modelLatencyMs
+
+// ---------------------------------------------------------------------
+// Q3. Répartition des codes HTTP (API + Functions) et des erreurs du worker
+// ---------------------------------------------------------------------
+requests
+| where timestamp > ago(24h)
+| summarize count() by cloud_RoleName, resultCode
+| order by cloud_RoleName asc, resultCode asc
+| render piechart
+
+// Q3 bis - erreurs du worker par type (tentatives avant la file -poison)
+customMetrics
+| where timestamp > ago(24h)
+| where name == "pipeline.errors"
+| extend error = tostring(customDimensions.error)
+| summarize errors = sum(valueSum) by error
+
+// ---------------------------------------------------------------------
+// Bonus. Latence du modèle p50 / p95 par heure
+// ---------------------------------------------------------------------
+traces
+| where message == "inference_done"
+| extend modelLatencyMs = todouble(customDimensions.modelLatencyMs)
+| summarize p50 = percentile(modelLatencyMs, 50), p95 = percentile(modelLatencyMs, 95) by bin(timestamp, 1h)
+| render timechart
+
+// Requête utilisée par l'alerte "alert-pipeline-errors" (évaluée toutes les 15 min)
+customMetrics
+| where name == 'pipeline.errors' and valueSum > 0

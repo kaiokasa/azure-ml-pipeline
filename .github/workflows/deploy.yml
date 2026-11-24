@@ -1,0 +1,76 @@
+name: Deploy
+
+# Runs after CI succeeds on a push to main (the image tagged with the commit SHA then exists on GHCR).
+# The "production" environment has a required reviewer -> manual approval before anything is deployed.
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write   # OIDC token for azure/login
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+    environment: production
+    runs-on: ubuntu-latest
+    env:
+      SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+      RG: ${{ vars.AZURE_RG }}
+      API: ${{ vars.CONTAINERAPP_NAME }}
+      FUNC: ${{ vars.FUNCAPP_NAME }}
+      ST: ${{ vars.STORAGE_ACCOUNT }}
+    steps:
+      - uses: actions/checkout@v4
+        with: { ref: "${{ env.SHA }}" }
+
+      - name: Azure login (OIDC, user-assigned managed identity - no password, no key)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Update Container Apps (API) to the image of this commit
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}/api:${SHA}"
+          az containerapp update -n "$API" -g "$RG" --image "$IMAGE" \
+            --revision-suffix "g${SHA:0:7}" -o none
+          echo "API_FQDN=$(az containerapp show -n "$API" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)" >> "$GITHUB_ENV"
+
+      - name: Deploy the Function App (Flex Consumption, remote build)
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.FUNC }}
+          package: functions
+          sku: flexconsumption
+          remote-build: true
+
+      - name: Publish the dashboard to the $web static website
+        run: |
+          FUNC_HOST=$(az functionapp show -n "$FUNC" -g "$RG" --query defaultHostName -o tsv)
+          echo "window.PIPELINE_CONFIG = { apiBase: \"https://${FUNC_HOST}\" };" > web/config.js
+          az storage blob upload-batch --account-name "$ST" --auth-mode login \
+            -d '$web' -s web --overwrite -o none
+          echo "Dashboard: $(az storage account show -n "$ST" -g "$RG" --query primaryEndpoints.web -o tsv)"
+
+      - name: Smoke test - production API answers with this commit
+        run: |
+          OK=0
+          for i in $(seq 1 18); do   # scale from zero + revision switch can take a little while
+            BODY=$(curl -fsS --max-time 30 "https://${API_FQDN}/version" || true)
+            echo "attempt $i: $BODY"
+            if echo "$BODY" | grep -q "\"git_sha\":\"${SHA}\""; then OK=1; break; fi
+            sleep 10
+          done
+          test "$OK" = 1
+          curl -fsS -X POST "https://${API_FQDN}/predict" -H 'Content-Type: application/json' \
+            -d '{"texts":["Excellent product, works perfectly."]}'

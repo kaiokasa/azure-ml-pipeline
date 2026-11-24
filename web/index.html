@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pipeline ML – avis clients</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="config.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Analyse de sentiment des avis clients</h1>
+      <p class="sub">Pipeline événementiel Azure · Blob → Event Grid → Queue → Function → API ML → Cosmos DB</p>
+    </div>
+    <div class="status">
+      <span id="dot" class="dot"></span>
+      <span id="updated">Chargement…</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="kpis">
+      <div class="kpi"><span class="label">Fichiers traités (20 derniers)</span><span id="k-files" class="value">–</span></div>
+      <div class="kpi"><span class="label">Avis analysés</span><span id="k-lines" class="value">–</span></div>
+      <div class="kpi"><span class="label">Part d’avis négatifs</span><span id="k-neg" class="value">–</span></div>
+      <div class="kpi"><span class="label">Durée moyenne de traitement</span><span id="k-dur" class="value">–</span></div>
+    </section>
+
+    <section class="charts">
+      <figure>
+        <figcaption>Part d’avis négatifs par fichier</figcaption>
+        <div class="chart-box"><canvas id="chart-neg"></canvas></div>
+      </figure>
+      <figure>
+        <figcaption>Latence du modèle et durée de bout en bout (ms)</figcaption>
+        <div class="chart-box"><canvas id="chart-lat"></canvas></div>
+      </figure>
+    </section>
+
+    <section>
+      <h2>20 dernières inférences</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Horodatage</th><th>Fichier</th><th>Prédiction</th><th class="num">Confiance</th>
+              <th class="num">Avis</th><th class="num">% négatifs</th><th>Modèle</th><th class="num">Durée (ms)</th>
+            </tr>
+          </thead>
+          <tbody id="rows"><tr><td colspan="8" class="empty">Aucune donnée pour l’instant.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+  <footer>Actualisation automatique toutes les 30 s · source : <code id="src"></code></footer>
+</body>
+</html>

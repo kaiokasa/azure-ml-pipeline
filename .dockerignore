@@ -1,0 +1,5 @@
+**
+!api/requirements.txt
+!api/app/**
+!model/model-1.0.0.joblib
+**/__pycache__
