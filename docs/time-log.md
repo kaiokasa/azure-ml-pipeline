@@ -12,7 +12,7 @@ Une ligne par séance de travail (budget : 12 h par étudiant sur 15 jours). Les
 | 2026-11-24 | Omar BOUCHENTOUF | `01-setup.sh` (Cosmos, stockage, supervision, Container Apps, Functions, alerte, budget), `02-roles.sh` | 0,5 | Git Bash réécrit les chemins `/…` : `MSYS_NO_PATHCONV` |
 | 2026-11-24 | Omar BOUCHENTOUF | Premier déploiement GitHub Actions | 0,5 | `AADSTS700213` (sujet OIDC avec identifiants), `ExpressRevisionSuffixNotSupported` |
 | 2026-11-24 | Omar BOUCHENTOUF | Event Grid, tests de bout en bout (valide, invalide, poison), alerte, requêtes KQL, captures | 0,75 | Nom d’hôte Function App vide (`properties.defaultHostName`), métriques perdues sur Flex |
-| | Membre B | | | |
+| | Mohamed JOURFI | | | |
 | | Membre C | | | |
 
 ## Total par membre
@@ -20,5 +20,5 @@ Une ligne par séance de travail (budget : 12 h par étudiant sur 15 jours). Les
 | Membre | Total (h) |
 |---|---|
 | Omar BOUCHENTOUF | 3,5 |
-| Membre B | |
+| Mohamed JOURFI | |
 | Membre C | |
