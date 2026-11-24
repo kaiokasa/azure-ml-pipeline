@@ -58,7 +58,7 @@ if ! az containerapp env show -n "$ENV" -g "$RG" -o none 2>/dev/null; then
     -o none
 fi
 ENV_ID=$(az containerapp env show -n "$ENV" -g "$RG" --query id -o tsv)
-TMP_YAML="$(mktemp)"
+TMP_YAML="$(winpath "$(mktemp)")"
 cat > "$TMP_YAML" <<YAML
 location: $LOC
 properties:

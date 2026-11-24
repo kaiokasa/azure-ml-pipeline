@@ -7,8 +7,8 @@
 #   bash infra/demo.sh burst N   -> upload N copies (load test / scale-out)
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT="$(dirname "$HERE")"
 source "$HERE/config.sh"
+ROOT="$(winpath "$(dirname "$HERE")")"
 AUTH=(--account-name "$ST" --auth-mode login)
 TS=$(date +%Y%m%d-%H%M%S)
 
@@ -28,7 +28,7 @@ case "${1:-status}" in
   burst)
     N="${2:-100}"; TMP=$(mktemp -d)
     for i in $(seq -w 1 "$N"); do cp "$ROOT/samples/reviews-mixed.txt" "$TMP/burst-$TS-$i.txt"; done
-    az storage blob upload-batch "${AUTH[@]}" -d input -s "$TMP" -o none; rm -rf "$TMP"
+    az storage blob upload-batch "${AUTH[@]}" -d input -s "$(winpath "$TMP")" -o none; rm -rf "$TMP"
     echo "Uploaded $N files" ;;
   status)
     for q in "$QUEUE" "$QUEUE-poison"; do

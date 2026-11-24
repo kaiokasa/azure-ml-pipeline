@@ -3,7 +3,7 @@
 # Storage and Cosmos names must be globally unique (storage: lowercase, no dash, <= 24 chars).
 
 EQ="${EQ:-mlpipe}"                     # team name, lowercase letters/digits only, e.g. iaml3
-LOC="${LOC:-<region-choisie>}"           # e.g. francecentral - must pass infra/00-check-region.sh
+LOC="${LOC:-germanywestcentral}"           # e.g. francecentral - must pass infra/00-check-region.sh
 GH_REPO="${GH_REPO:-kaiokasa/azure-ml-pipeline}"   # GitHub owner/repo, e.g. jdupont/azure-ml-pipeline
 ALERT_EMAIL="${ALERT_EMAIL:-<email>}"    # receives budget + alert e-mails
 
@@ -18,6 +18,9 @@ LAW="log-$EQ"
 AI="appi-$EQ"
 AG="ag-$EQ"
 QUEUE="inference-requests"
+# Native path for local files (Git Bash on Windows needs C:/..., Cloud Shell keeps /...)
+winpath() { if command -v cygpath >/dev/null 2>&1; then cygpath -m "$1"; else echo "$1"; fi; }
+
 IMAGE="ghcr.io/$(echo "$GH_REPO" | tr '[:upper:]' '[:lower:]')/api"
 
 if [[ "$EQ" == *"<"* || "$LOC" == *"<"* || "$GH_REPO" == *"<"* || "$ALERT_EMAIL" == *"<"* ]]; then
