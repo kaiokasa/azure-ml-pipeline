@@ -23,7 +23,7 @@ winpath() { if command -v cygpath >/dev/null 2>&1; then cygpath -m "$1"; else ec
 
 IMAGE="ghcr.io/$(echo "$GH_REPO" | tr '[:upper:]' '[:lower:]')/api"
 
-if [[ "$EQ" == *"<"* || "$LOC" == *"<"* || "$GH_REPO" == *"<"* || "$ALERT_EMAIL" == *"<"* ]]; then
-  echo "Edit infra/config.sh (or export EQ, LOC, GH_REPO, ALERT_EMAIL) first." >&2
+if [[ "$EQ" == *"<"* || "$LOC" == *"<"* || "$GH_REPO" == *"<"* ]]; then
+  echo "Edit infra/config.sh (or export EQ, LOC, GH_REPO) first." >&2
   return 1 2>/dev/null || exit 1
 fi

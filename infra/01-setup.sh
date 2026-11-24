@@ -5,6 +5,7 @@
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$HERE/config.sh"
+[[ "$ALERT_EMAIL" != *"<"* ]] || { echo "Set ALERT_EMAIL (export ALERT_EMAIL=you@example.com) first." >&2; exit 1; }
 
 echo "== Resource group (tags projet=dscc, equipe=$EQ)"
 az group create -n "$RG" -l "$LOC" --tags projet=dscc equipe="$EQ" -o none
