@@ -23,6 +23,7 @@ traces
          durationMs = todouble(customDimensions.durationMs),
          modelLatencyMs = todouble(customDimensions.modelLatencyMs),
          lines = toint(customDimensions.lines)
+| where isnotempty(fileName)   // the Functions host also logs the line, without dimensions
 | top 5 by durationMs desc
 | project timestamp, fileName, lines, durationMs, modelLatencyMs
 

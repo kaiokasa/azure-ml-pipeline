@@ -56,7 +56,8 @@ jobs:
 
       - name: Publish the dashboard to the $web static website
         run: |
-          FUNC_HOST=$(az functionapp show -n "$FUNC" -g "$RG" --query defaultHostName -o tsv)
+          FUNC_HOST=$(az functionapp show -n "$FUNC" -g "$RG" --query "properties.defaultHostName || defaultHostName" -o tsv)
+          test -n "$FUNC_HOST" || { echo "Function App host name not found"; exit 1; }
           echo "window.PIPELINE_CONFIG = { apiBase: \"https://${FUNC_HOST}\" };" > web/config.js
           az storage blob upload-batch --account-name "$ST" --auth-mode login \
             -d '$web' -s web --overwrite -o none

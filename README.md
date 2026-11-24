@@ -236,6 +236,7 @@ customMetrics
 traces
 | where message == "inference_done"
 | extend fileName = tostring(customDimensions.fileName), durationMs = todouble(customDimensions.durationMs)
+| where isnotempty(fileName)
 | top 5 by durationMs desc
 | project timestamp, fileName, durationMs
 ```
@@ -265,7 +266,15 @@ requests
 
 ## 11. Région, coûts et nettoyage
 
-**Région choisie : `<region>`**. Elle apparaît à la fois dans la liste *Allowed locations* de l’abonnement d’intégration et dans `az functionapp list-flexconsumption-locations`. Container Apps et Cosmos DB y ont été créés sans refus de capacité. *(Notez ici les régions essayées et refusées.)*
+**Région choisie : `germanywestcentral`**.
+
+- Régions autorisées par la stratégie *Allowed resource deployment regions* de l’abonnement : `spaincentral`, `denmarkeast`, `germanywestcentral`, `austriaeast`, `switzerlandnorth`.
+- Parmi elles, Flex Consumption est disponible partout **sauf** `denmarkeast`.
+- `germanywestcentral` a été retenue : c’est une région mature, et Cosmos DB Free Tier, Container Apps et la Function App Flex y ont été créés du premier coup, sans refus de capacité ni limitation 429.
+
+URL publiques :
+- API : `https://api-mlpipe.ashyflower-543a12e0.germanywestcentral.azurecontainerapps.io`
+- Tableau de bord : `https://stmlpipepipe.z1.web.core.windows.net/`
 
 | Poste | Estimation sur 15 jours |
 |---|---|
@@ -293,4 +302,7 @@ requests
 | Contributor ne peut pas attribuer de rôles | `AuthorizationFailed` sur `roleAssignments/write` | Attributions faites une fois par le propriétaire (`02-roles.sh`). |
 | Required reviewers / environnements | `AADSTS700213` en dépôt privé | Dépôt **public** avec environnement `production` et relecteur obligatoire. |
 | Crédit partagé de 100 $ | ressources désactivées si épuisé | Budget 25 $ + alertes, plafond Log Analytics, 0 réplica au repos, nettoyage scripté. |
-| *(à compléter avec vos propres incidents)* | | |
+| Tenant avec MFA obligatoire | `az login` : `AADSTS50076` puis « No subscriptions found » | `az login --tenant <id du tenant>` pour déclencher la MFA. Le *broker* Windows (WAM) étant annulé, connexion par navigateur (`core.enable_broker_on_windows=false`). |
+| Sujet OIDC GitHub à identifiants immuables | `AADSTS700213` : le sujet présenté est `repo:kaiokasa@146456810/azure-ml-pipeline@1469889693:environment:production` | Deuxième information d’identification fédérée avec ce sujet exact. `01-setup.sh` l’enregistre désormais automatiquement via `gh api`. |
+| Environnement Container Apps « express » | `ExpressRevisionSuffixNotSupported` sur `az containerapp update --revision-suffix` | Suffixe de révision retiré de `deploy.yml`. La version déployée est prouvée par `GET /version` (`git_sha`). |
+| Git Bash (Windows) réécrit les arguments `/…` | `--partition-key-path /fileName`, `--scope /` transformés en chemins Windows | `MSYS_NO_PATHCONV=1` et fonction `winpath` dans `infra/config.sh`. |
