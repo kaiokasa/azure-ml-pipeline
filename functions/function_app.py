@@ -53,6 +53,17 @@ MAX_BYTES = int(os.getenv("MAX_FILE_BYTES", str(MAX_FILE_BYTES)))
 app = func.FunctionApp()
 
 
+def _flush_metrics() -> None:
+    """Export metrics now: on Flex Consumption an idle instance can be frozen or recycled
+    before the 60 s periodic export, which silently drops the custom metrics."""
+    provider = metrics.get_meter_provider()
+    if hasattr(provider, "force_flush"):
+        try:
+            provider.force_flush(timeout_millis=5000)
+        except Exception:  # telemetry must never fail the pipeline
+            log.debug("metric flush failed", exc_info=True)
+
+
 def _reject(name: str, reason: str, content: bytes | None) -> None:
     svc = clients.blob_service()
     report = {"fileName": name, "reason": reason, "rejectedAt": datetime.now(UTC).isoformat()}
@@ -61,6 +72,7 @@ def _reject(name: str, reason: str, content: bytes | None) -> None:
     svc.get_blob_client("rejected", f"{name}.reason.json").upload_blob(json.dumps(report, indent=2), overwrite=True)
     m_rejected.add(1)
     log.warning("file_rejected", extra={"fileName": name, "reason": reason})
+    _flush_metrics()
 
 
 # --------------------------------------------------------------------------- dispatcher
@@ -191,6 +203,8 @@ def worker(msg: func.QueueMessage) -> None:
             extra={"dequeueCount": msg.dequeue_count, "error": f"{type(exc).__name__}: {exc}"[:500]},
         )
         raise  # -> retried; after maxDequeueCount (5) the message goes to inference-requests-poison
+    finally:
+        _flush_metrics()
 
 
 # --------------------------------------------------------------------------- recent

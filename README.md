@@ -224,12 +224,18 @@ Autre scénario : l’API est indisponible (`az containerapp update --image …:
 
 **Q1 – Inférences par heure**
 ```kusto
-customMetrics
-| where timestamp > ago(24h) and name == "pipeline.inferences"
-| summarize inferences = sum(valueSum) by bin(timestamp, 1h)
+traces
+| where timestamp > ago(24h)
+| where message == "inference_done" and isnotempty(customDimensions.fileName)
+| summarize inferences = count(), avis = sum(toint(customDimensions.lines)) by bin(timestamp, 1h)
 | render columnchart
 ```
-![Q1](docs/screenshots/kql-q1-inferences-per-hour.png)
+Résultat obtenu le 24/11/2026 (Application Insights `appi-mlpipe`) :
+
+| timestamp (UTC) | inferences | avis |
+|---|---|---|
+| 2026-11-24 09:00 | 1 | 8 |
+| 2026-11-24 10:00 | 5 | 120 |
 
 **Q2 – 5 fichiers les plus lents**
 ```kusto
@@ -240,7 +246,15 @@ traces
 | top 5 by durationMs desc
 | project timestamp, fileName, durationMs
 ```
-![Q2](docs/screenshots/kql-q2-slowest-files.png)
+Résultat obtenu :
+
+| timestamp (UTC) | fileName | lignes | durationMs | modelLatencyMs |
+|---|---|---|---|---|
+| 09:58:46 | reviews-20261124-105820.txt | 8 | 1385.3 | 161.2 (démarrage à froid de l’API) |
+| 10:36:06 | avis-amazon-extrait.txt | 53 | 1356.3 | 215.8 |
+| 10:36:06 | avis-yelp-extrait.txt | 52 | 1345.6 | 162.5 |
+| 10:36:06 | avis-restaurant-paris.txt | 8 | 1343.6 | 169.8 |
+| 10:36:06 | avis-boutique-lyon.txt | 3 | 1339.8 | 174.7 |
 
 **Q3 – Répartition des codes HTTP**
 ```kusto
@@ -249,7 +263,32 @@ requests
 | summarize count() by cloud_RoleName, resultCode
 | render piechart
 ```
-![Q3](docs/screenshots/kql-q3-http-codes.png)
+Résultat obtenu :
+
+| cloud_RoleName | resultCode | count |
+|---|---|---|
+| sentiment-api | 200 | 163 |
+| func-mlpipe | 200 | 36 |
+| func-mlpipe | 0 | 19 (invocations file d’attente / Event Grid, sans code HTTP) |
+
+Erreurs du worker (Q3 bis) : `pipeline.errors` = 5 (`KeyError`, les 5 tentatives du message empoisonné), `pipeline.rejected` = 2.
+
+**Alerte déclenchée** : `alert-pipeline-errors`, état *Fired*, sévérité 2, le 2026-11-24 à 10:18:32 UTC, suite au message empoisonné envoyé à 10:12 (`bash infra/demo.sh poison`).
+
+### Preuves des tests de bout en bout (24/11/2026)
+
+| Scénario | Commande | Résultat observé |
+|---|---|---|
+| Dépôt valide | `bash infra/demo.sh valid` | `input/` à 10:58:20 → document Cosmos DB à 10:58:46 (**≈ 26 s**, démarrage à froid inclus), `output/reviews-….json` |
+| Lot de 5 fichiers | `az storage blob upload-batch` | 5 résultats en moins d’une minute, 120 avis |
+| Dépôt invalide | `bash infra/demo.sh invalid` | `rejected/bad-….csv` (*extension not allowed (expected .txt)*) et `rejected/empty-….txt` (*no non-blank line*), chacun avec `.reason.json` |
+| Message empoisonné | `bash infra/demo.sh poison` | 5 tentatives (`KeyError`) puis `inference-requests-poison` en ≈ 1 min |
+| Mise à l’échelle jusqu’à zéro | `az containerapp replica list` | 0 réplica après la période d’inactivité |
+| Déploiement continu | push sur `main` → approbation → *Deploy* | `GET /version` renvoie le `git_sha` du commit déployé |
+
+Captures : [tableau de bord](docs/screenshots/dashboard.jpg), [workflows GitHub Actions](docs/screenshots/github-actions.jpg), [déploiement OIDC](docs/screenshots/github-deploy-oidc.jpg).
+
+![Tableau de bord](docs/screenshots/dashboard.jpg)
 
 ## 10. CI/CD et sécurité
 
@@ -305,4 +344,5 @@ URL publiques :
 | Tenant avec MFA obligatoire | `az login` : `AADSTS50076` puis « No subscriptions found » | `az login --tenant <id du tenant>` pour déclencher la MFA. Le *broker* Windows (WAM) étant annulé, connexion par navigateur (`core.enable_broker_on_windows=false`). |
 | Sujet OIDC GitHub à identifiants immuables | `AADSTS700213` : le sujet présenté est `repo:kaiokasa@146456810/azure-ml-pipeline@1469889693:environment:production` | Deuxième information d’identification fédérée avec ce sujet exact. `01-setup.sh` l’enregistre désormais automatiquement via `gh api`. |
 | Environnement Container Apps « express » | `ExpressRevisionSuffixNotSupported` sur `az containerapp update --revision-suffix` | Suffixe de révision retiré de `deploy.yml`. La version déployée est prouvée par `GET /version` (`git_sha`). |
+| Flex Consumption : métriques perdues | Les traces `inference_done` arrivent mais pas `pipeline.inferences` (instance gelée avant l’export périodique de 60 s) | `force_flush()` du fournisseur de métriques à la fin de chaque exécution du *worker* et du rejet. Q1 basée sur les traces. |
 | Git Bash (Windows) réécrit les arguments `/…` | `--partition-key-path /fileName`, `--scope /` transformés en chemins Windows | `MSYS_NO_PATHCONV=1` et fonction `winpath` dans `infra/config.sh`. |

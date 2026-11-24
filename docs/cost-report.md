@@ -1,4 +1,4 @@
-# Rapport de coûts – équipe `<equipe>`
+# Rapport de coûts – équipe `mlpipe`
 
 > 1 page. À compléter à J15 avec la capture de **Cost Management > Cost analysis** filtrée sur l’étiquette `projet=dscc`.
 
@@ -16,23 +16,31 @@
 | GitHub Actions + GHCR | gratuit (dépôt public) | – | 0,00 $ |
 | **Total estimé** | | | **≈ 0,35 $** (enveloppe : 25 $) |
 
-## 2. Coût réel à J15
+## 2. Coût réel
 
-| Service | Coût réel (Cost analysis) |
+**J0 (24/11/2026, jour du déploiement)** : la plateforme a été créée et testée le 24/11. Le coût réel n’était pas encore consultable ce jour-là (API Cost Management limitée, et les données de coût apparaissent avec 8 à 24 h de retard) ; il sera relevé à J15. Ressources actives : 11 (voir `az resource list -g rg-projet-mlpipe`), API à 0 réplica au repos.
+
+**J15** (à relever dans *Cost Management > Cost analysis*, filtre `projet=dscc`, puis capture) :
+
+| Service | Coût réel |
 |---|---|
-| … | … |
+| Storage | … $ |
+| Azure Monitor (Log Analytics, alerte) | … $ |
+| Container Apps | … $ |
+| Functions | … $ |
+| Azure Cosmos DB | … $ |
 | **Total** | **… $** |
 
 Capture : `docs/screenshots/cost-analysis-j15.png`
 
 ## 3. Écart expliqué
 
-- … (ex. : transactions de stockage plus nombreuses à cause du polling des files par le worker Flex ; tests de charge ; ACR non utilisé → 0 $)
+- … à compléter à J15. Postes susceptibles d’écart : transactions de stockage (interrogation des files par le *worker* Flex, déploiements du paquet Functions), règle d’alerte de journal facturée au prorata. ACR non utilisé (GHCR) → 0 $.
 
 ## 4. Garde-fous en place
 
-- Étiquettes `projet=dscc`, `equipe=<equipe>` sur le groupe de ressources.
-- Budget `budget-<equipe>` de 25 $ sur le groupe, alertes e-mail à 20 %, 50 % et 80 %.
+- Étiquettes `projet=dscc`, `equipe=mlpipe` sur le groupe de ressources (vérifié).
+- Budget `budget-mlpipe` de 25 $ sur le groupe, alertes e-mail à 20 %, 50 % et 80 %.
 - Plafond journalier Log Analytics : 0,2 Go/jour.
 - API à `min-replicas 0`, pas d’ACR (GHCR gratuit), aucune VM.
 
@@ -40,7 +48,7 @@ Capture : `docs/screenshots/cost-analysis-j15.png`
 
 ```
 $ bash infra/99-cleanup.sh
-az group exists -n rg-projet-<equipe>  ->  false
+az group exists -n rg-projet-mlpipe  ->  false
 ```
 Captures : `docs/screenshots/group-exists-false.png`, `docs/screenshots/group-list-empty.png`
 (aucun `DefaultResourceGroup-*` restant).

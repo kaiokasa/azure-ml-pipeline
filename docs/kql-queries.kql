@@ -4,13 +4,19 @@
 // =====================================================================
 
 // ---------------------------------------------------------------------
-// Q1. Inférences par heure (métrique personnalisée pipeline.inferences)
+// Q1. Inférences par heure (une trace "inference_done" par fichier traité)
 // ---------------------------------------------------------------------
-customMetrics
+traces
 | where timestamp > ago(24h)
-| where name == "pipeline.inferences"
-| summarize inferences = sum(valueSum) by bin(timestamp, 1h)
+| where message == "inference_done" and isnotempty(customDimensions.fileName)
+| summarize inferences = count(), avis = sum(toint(customDimensions.lines)) by bin(timestamp, 1h)
 | order by timestamp asc
+| render columnchart
+
+// Q1 bis - même indicateur via la métrique personnalisée pipeline.inferences
+customMetrics
+| where timestamp > ago(24h) and name == "pipeline.inferences"
+| summarize inferences = sum(valueSum) by bin(timestamp, 1h)
 | render columnchart
 
 // ---------------------------------------------------------------------
