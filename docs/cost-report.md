@@ -18,7 +18,10 @@
 
 ## 2. Coût réel
 
-**J0 (24/11/2026, jour du déploiement)** : la plateforme a été créée et testée le 24/11. Le coût réel n’était pas encore consultable ce jour-là (API Cost Management limitée, et les données de coût apparaissent avec 8 à 24 h de retard) ; il sera relevé à J15. Ressources actives : 11 (voir `az resource list -g rg-projet-mlpipe`), API à 0 réplica au repos.
+**J0 (24/11/2026, jour du déploiement)** : la plateforme a été créée et testée le 24/11. Le coût réel n’était pas encore consultable ce jour-là (API Cost Management limitée, et les données de coût apparaissent avec 8 à 24 h de retard) ; il sera relevé à J15. Capture J0 : *Cost analysis* du groupe « No cost reported during this period », budget `budget-mlpipe` à **0,00 $ / 25,00 $ (0 %)**.
+
+![Cost analysis J0](screenshots/cost-analysis-j0.jpg)
+![Budget 25 $](screenshots/budget-25usd.jpg) Ressources actives : 11 (voir `az resource list -g rg-projet-mlpipe`), API à 0 réplica au repos.
 
 **J15** (à relever dans *Cost Management > Cost analysis*, filtre `projet=dscc`, puis capture) :
 

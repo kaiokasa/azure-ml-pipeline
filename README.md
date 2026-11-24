@@ -235,7 +235,9 @@ Résultat obtenu le 24/11/2026 (Application Insights `appi-mlpipe`) :
 | timestamp (UTC) | inferences | avis |
 |---|---|---|
 | 2026-11-24 09:00 | 1 | 8 |
-| 2026-11-24 10:00 | 5 | 120 |
+| 2026-11-24 10:00 | 6 | 128 |
+
+![Q1 – inférences par heure](docs/screenshots/kql-q1-inferences-par-heure.jpg)
 
 **Q2 – 5 fichiers les plus lents**
 ```kusto
@@ -256,6 +258,8 @@ Résultat obtenu :
 | 10:36:06 | avis-restaurant-paris.txt | 8 | 1343.6 | 169.8 |
 | 10:36:06 | avis-boutique-lyon.txt | 3 | 1339.8 | 174.7 |
 
+![Q2 – 5 fichiers les plus lents](docs/screenshots/kql-q2-fichiers-les-plus-lents.jpg)
+
 **Q3 – Répartition des codes HTTP**
 ```kusto
 requests
@@ -265,15 +269,21 @@ requests
 ```
 Résultat obtenu :
 
-| cloud_RoleName | resultCode | count |
+| cloud_RoleName | resultCode | requests |
 |---|---|---|
-| sentiment-api | 200 | 163 |
-| func-mlpipe | 200 | 36 |
-| func-mlpipe | 0 | 19 (invocations file d’attente / Event Grid, sans code HTTP) |
+| func-mlpipe | 0 | 21 (invocations file d’attente / Event Grid, sans code HTTP) |
+| func-mlpipe | 200 | 68 |
+| sentiment-api | 200 | 280 |
+
+![Q3 – codes HTTP](docs/screenshots/kql-q3-codes-http.jpg)
+
+![Métriques personnalisées](docs/screenshots/kql-metriques-personnalisees.jpg)
 
 Erreurs du worker (Q3 bis) : `pipeline.errors` = 5 (`KeyError`, les 5 tentatives du message empoisonné), `pipeline.rejected` = 2.
 
-**Alerte déclenchée** : `alert-pipeline-errors`, état *Fired*, sévérité 2, le 2026-11-24 à 10:18:32 UTC, suite au message empoisonné envoyé à 10:12 (`bash infra/demo.sh poison`).
+**Alerte déclenchée** : `alert-pipeline-errors`, état *Fired*, sévérité 2, le 2026-11-24 à 10:18:32 UTC, suite au message empoisonné envoyé à 10:12 (`bash infra/demo.sh poison`), puis résolue automatiquement.
+
+![Alerte déclenchée](docs/screenshots/alerte-declenchee.jpg)
 
 ### Preuves des tests de bout en bout (24/11/2026)
 
@@ -286,9 +296,13 @@ Erreurs du worker (Q3 bis) : `pipeline.errors` = 5 (`KeyError`, les 5 tentatives
 | Mise à l’échelle jusqu’à zéro | `az containerapp replica list` | 0 réplica après la période d’inactivité |
 | Déploiement continu | push sur `main` → approbation → *Deploy* | `GET /version` renvoie le `git_sha` du commit déployé |
 
-Captures : [tableau de bord](docs/screenshots/dashboard.jpg), [workflows GitHub Actions](docs/screenshots/github-actions.jpg), [déploiement OIDC](docs/screenshots/github-deploy-oidc.jpg).
-
 ![Tableau de bord](docs/screenshots/dashboard.jpg)
+
+![API à 0 réplica (Container Apps, « Scaled to 0 »)](docs/screenshots/api-0-replica.jpg)
+
+![Groupe de ressources rg-projet-mlpipe](docs/screenshots/azure-resource-group.jpg)
+
+Autres captures : [workflows GitHub Actions](docs/screenshots/github-actions.jpg), [déploiement OIDC réussi](docs/screenshots/github-deploy-oidc.jpg), [budget 25 $](docs/screenshots/budget-25usd.jpg), [Cost analysis J0](docs/screenshots/cost-analysis-j0.jpg).
 
 ## 10. CI/CD et sécurité
 
