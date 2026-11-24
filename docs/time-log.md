@@ -13,7 +13,6 @@ Une ligne par séance de travail (budget : 12 h par étudiant sur 15 jours). Les
 | 2026-11-24 | Omar BOUCHENTOUF | Premier déploiement GitHub Actions | 0,5 | `AADSTS700213` (sujet OIDC avec identifiants), `ExpressRevisionSuffixNotSupported` |
 | 2026-11-24 | Omar BOUCHENTOUF | Event Grid, tests de bout en bout (valide, invalide, poison), alerte, requêtes KQL, captures | 0,75 | Nom d’hôte Function App vide (`properties.defaultHostName`), métriques perdues sur Flex |
 | | Mohamed JOURFI | | | |
-| | Membre C | | | |
 
 ## Total par membre
 
@@ -21,4 +20,3 @@ Une ligne par séance de travail (budget : 12 h par étudiant sur 15 jours). Les
 |---|---|
 | Omar BOUCHENTOUF | 3,5 |
 | Mohamed JOURFI | |
-| Membre C | |
