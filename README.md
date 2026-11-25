@@ -40,6 +40,10 @@ flowchart LR
 
 Transverse : Application Insights (OpenTelemetry) + Log Analytics plafonné, GitHub Actions (OIDC), identités managées, budget et alertes.
 
+Schéma exporté : [`docs/architecture.png`](docs/architecture.png).
+
+![Architecture du pipeline](docs/architecture.png)
+
 | # | Service | Ressource | Rôle |
 |---|---|---|---|
 | 1 | Blob Storage (Standard LRS, chaud, versionnage) | `st<equipe>pipe` | `input/`, `output/`, `rejected/`, `models/`, `$web` |
@@ -102,7 +106,7 @@ infra/bicep/  main.bicep, main.bicepparam, deploy.sh (bonus IaC : tout le socle 
 samples/      fichiers de démonstration valides et invalides
 loadtest/     burst.sh (rafale de fichiers), locustfile.py, analysis.kql (bonus test de charge)
 .github/workflows/  ci.yml, deploy.yml
-docs/         kql-queries.kql, cost-report.md, time-log.md, demo-script.md, screenshots/
+docs/         architecture.png, kql-queries.kql, cost-report.md, time-log.md, demo-script.md, screenshots/
 ```
 
 ## 5. Développement local
