@@ -12,6 +12,7 @@ on:
 permissions:
   id-token: write   # OIDC token for azure/login
   contents: read
+  actions: read     # find the last successful CI run (image fallback)
 
 concurrency:
   group: deploy-production
@@ -39,9 +40,23 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Update Container Apps (API) to the image of this commit
+      - name: Resolve the API image to deploy
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}/api:${SHA}"
+          # A commit pushed with [skip ci] (docs, infra) has no image of its own:
+          # deploy the last image CI built on main instead of failing.
+          TAG="$SHA"
+          if ! docker manifest inspect "ghcr.io/${GITHUB_REPOSITORY,,}/api:${TAG}" > /dev/null 2>&1; then
+            TAG=$(gh run list -R "$GITHUB_REPOSITORY" --workflow CI --branch main --event push                   --status success --limit 1 --json headSha -q '.[0].headSha')
+            echo "No image for ${SHA} (CI skipped): deploying the last image built on main, ${TAG}"
+          fi
+          test -n "$TAG"
+          echo "IMAGE_SHA=${TAG}" >> "$GITHUB_ENV"
+
+      - name: Update Container Apps (API) to that image
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}/api:${IMAGE_SHA}"
           # (no --revision-suffix: not supported on express Container Apps environments)
           az containerapp update -n "$API" -g "$RG" --image "$IMAGE" -o none
           echo "API_FQDN=$(az containerapp show -n "$API" -g "$RG" --query properties.configuration.ingress.fqdn -o tsv)" >> "$GITHUB_ENV"
@@ -63,13 +78,13 @@ jobs:
             -d '$web' -s web --overwrite -o none
           echo "Dashboard: $(az storage account show -n "$ST" -g "$RG" --query primaryEndpoints.web -o tsv)"
 
-      - name: Smoke test - production API answers with this commit
+      - name: Smoke test - production API answers with the deployed image
         run: |
           OK=0
           for i in $(seq 1 18); do   # scale from zero + revision switch can take a little while
             BODY=$(curl -fsS --max-time 30 "https://${API_FQDN}/version" || true)
             echo "attempt $i: $BODY"
-            if echo "$BODY" | grep -q "\"git_sha\":\"${SHA}\""; then OK=1; break; fi
+            if echo "$BODY" | grep -q "\"git_sha\":\"${IMAGE_SHA}\""; then OK=1; break; fi
             sleep 10
           done
           test "$OK" = 1
