@@ -83,7 +83,7 @@ b { color: var(--ink); font-weight: 700; }
 /* === STEP SLIDE LAYOUT ===============================================
    [numéro]  titre + phrase-résultat
    ┌ Ce que nous avons fait ┐  ┌ Résultat ┐
-   ─────────── parcours des 10 étapes ───────────                   */
+   ─────────── parcours des 8 étapes ───────────                   */
 .step-head { display: grid; grid-template-columns: 230px 1fr; align-items: end; margin-top: 52px; }
 .num {
   font-family: var(--display); font-weight: 850; font-stretch: 62%;
@@ -96,7 +96,8 @@ b { color: var(--ink); font-weight: 700; }
 }
 .col { display: flex; flex-direction: column; min-height: 0; }
 
-/* Liste « Ce que nous avons fait » : un vrai ordre chronologique. */
+/* Résumé de chaque étape : un court paragraphe. */
+.summary { font-size: 30px; line-height: 1.55; color: var(--ink-2); max-width: 760px; }
 ol.did { margin: 0; padding: 0; list-style: none; counter-reset: did; display: flex; flex-direction: column; gap: 16px; }
 ol.did li {
   counter-increment: did; position: relative; padding-left: 52px;
@@ -131,7 +132,7 @@ td.hi { color: var(--ink); font-weight: 700; }
 .fact .v { font-family: var(--display); font-weight: 800; font-stretch: 70%; font-size: 64px; line-height: 1; color: var(--ink); white-space: nowrap; }
 .fact .k { font-size: 27px; line-height: 1.35; }
 
-/* === ROUTE (parcours des 10 étapes) ==================================
+/* === ROUTE (parcours des 8 étapes) ==================================
    Ligne continue, une station par étape. Faites : pleines ; en cours :
    ambre et numérotée ; à venir : creuses. */
 .route { position: absolute; left: 96px; right: 96px; bottom: 34px; height: 92px; }
@@ -177,12 +178,14 @@ td.hi { color: var(--ink); font-weight: 700; }
 .diagram svg { width: 1728px; height: 520px; display: block; }
 .diagram text { font-family: var(--text); }
 
-/* === AGENDA (10 étapes) ============================================== */
+/* === AGENDA (8 étapes) ============================================== */
 .agenda { position: absolute; left: 96px; right: 96px; top: 300px; display: grid; grid-template-columns: 1fr 1fr; column-gap: 96px; }
 .agenda .it { display: grid; grid-template-columns: 92px 1fr; align-items: baseline; padding: 18px 0; border-top: 1px solid var(--rule); }
 .agenda .k { font-family: var(--display); font-weight: 850; font-stretch: 62%; font-size: 56px; line-height: 1; color: var(--amber-deep); }
 .agenda .t { font-size: 30px; line-height: 1.3; color: var(--ink-2); }
 .agenda .t b { font-family: var(--display); font-stretch: 90%; font-size: 31px; }
+
+.thanks { position: absolute; left: 96px; right: 96px; top: 0; bottom: 0; display: flex; align-items: center; }
 
 /* === GENERIC CONTENT ================================================= */
 .content { position: absolute; left: 96px; right: 96px; bottom: 120px; }
@@ -219,11 +222,11 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
      1. TITRE
      ================================================================ -->
 <section class="slide dark" data-title="Titre">
-  <div class="chrome"><span>ECE Paris · Systèmes distribués et IA</span><span class="pg"></span></div>
+  <div class="chrome"><span>ECE Paris</span><span class="pg"></span></div>
   <div class="title-route" aria-hidden="true"><span></span></div>
   <div class="title-wrap">
-    <h1>Pipeline de Machine Learning<br>événementiel sur Azure</h1>
-    <p class="lead">Analyse de sentiment d’avis clients, du dépôt d’un fichier jusqu’au tableau de bord, dans un compte Azure for Students.</p>
+    <h1>Analyse de sentiments<br>d’avis clients</h1>
+    <p class="lead">Pipeline de Machine Learning événementiel sur Azure</p>
   </div>
   <div class="byline">
     <p><b>Équipe mlpipe</b>Omar BOUCHENTOUF, Mohamed JOURFI<br>Anas, Cherif</p>
@@ -314,72 +317,33 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
      ================================================================ -->
 <section class="slide" data-title="Démarche">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
-  <div class="slide-title"><h2>Nous avons construit le projet en dix étapes, dans cet ordre</h2></div>
+  <div class="slide-title"><h2>Nous avons construit le projet en huit étapes, dans cet ordre</h2></div>
   <div class="agenda">
-    <div class="it"><span class="k">1</span><span class="t"><b>Cadrage</b> : cas d’usage et règles du jeu</span></div>
-    <div class="it"><span class="k">6</span><span class="t"><b>Azure</b> : région, ressources, contraintes</span></div>
-    <div class="it"><span class="k">2</span><span class="t"><b>Modèle</b> : données, entraînement, métriques</span></div>
-    <div class="it"><span class="k">7</span><span class="t"><b>CI/CD</b> : tester puis déployer sans secret</span></div>
-    <div class="it"><span class="k">3</span><span class="t"><b>API</b> : servir le modèle dans un conteneur</span></div>
-    <div class="it"><span class="k">8</span><span class="t"><b>Mesures</b> : métriques, requêtes, alerte</span></div>
-    <div class="it"><span class="k">4</span><span class="t"><b>Pipeline</b> : de l’événement au résultat</span></div>
-    <div class="it"><span class="k">9</span><span class="t"><b>Démonstration</b> : trois scénarios réels</span></div>
-    <div class="it"><span class="k">5</span><span class="t"><b>Tableau de bord</b> : stocker et afficher</span></div>
-    <div class="it"><span class="k">10</span><span class="t"><b>Bonus</b> : test de charge et Bicep</span></div>
+    <div class="it"><span class="k">1</span><span class="t"><b>Modèle</b> : données, entraînement, métriques</span></div>
+    <div class="it"><span class="k">5</span><span class="t"><b>CI/CD</b> : tester puis déployer sans secret</span></div>
+    <div class="it"><span class="k">2</span><span class="t"><b>API</b> : servir le modèle dans un conteneur</span></div>
+    <div class="it"><span class="k">6</span><span class="t"><b>Mesures</b> : métriques, requêtes, alerte</span></div>
+    <div class="it"><span class="k">3</span><span class="t"><b>Pipeline</b> : de l’événement au résultat</span></div>
+    <div class="it"><span class="k">7</span><span class="t"><b>Démonstration</b> : trois scénarios réels</span></div>
+    <div class="it"><span class="k">4</span><span class="t"><b>Tableau de bord</b> : stocker et afficher</span></div>
+    <div class="it"><span class="k">8</span><span class="t"><b>Bonus</b> : test de charge et Bicep</span></div>
   </div>
   <div class="route" data-step="0" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
-     ÉTAPE 1 — CADRAGE
+     ÉTAPE 2 — MODÈLE
      ================================================================ -->
 <section class="slide" data-title="Étape 1">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
     <div class="num">1</div>
-    <div><h2>Cadrage</h2><p class="lead">Un cas d’usage simple à valider et à lire, dans un budget de 25&#160;$.</p></div>
-  </div>
-  <div class="step-body">
-    <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Lu le sujet et ses limites : compte Azure for Students, 25&#160;$ au maximum, aucune machine virtuelle ni GPU.</li>
-        <li>Choisi l’analyse de sentiment d’avis clients : chaque ligne d’un fichier devient <span class="pos">positive</span> ou <span class="neg">négative</span>.</li>
-        <li>Fixé ce qu’est un fichier valide : <code>.txt</code>, 1&#160;Mo au plus, de 1&#160;à 500&#160;lignes.</li>
-        <li>Organisé le dépôt GitHub : <code>model/</code>, <code>api/</code>, <code>functions/</code>, <code>web/</code>, <code>infra/</code>, <code>docs/</code>.</li>
-      </ol>
-    </div>
-    <div class="col">
-      <h3>Pourquoi ce choix</h3>
-      <div class="facts">
-        <div class="fact"><span class="v">Léger</span><span class="k">Un modèle de 1,1&#160;Mo qui répond en quelques millisecondes sur un simple processeur.</span></div>
-        <div class="fact"><span class="v">Vérifiable</span><span class="k">Un fichier texte se valide facilement : extension, taille, encodage, nombre de lignes.</span></div>
-        <div class="fact"><span class="v">Lisible</span><span class="k">« 50&#160;% d’avis négatifs » se comprend tout de suite sur un tableau de bord.</span></div>
-      </div>
-    </div>
-  </div>
-  <div class="route" data-step="1" aria-hidden="true"></div>
-</section>
-
-<!-- ================================================================
-     ÉTAPE 2 — MODÈLE
-     ================================================================ -->
-<section class="slide" data-title="Étape 2">
-  <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
-  <div class="step-head">
-    <div class="num">2</div>
     <div><h2>Le modèle</h2><p class="lead">86&#160;% de bonnes réponses sur des phrases jamais vues, contre 50&#160;% pour un modèle naïf.</p></div>
   </div>
   <div class="step-body">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Récupéré le jeu de données UCI <i>Sentiment Labelled Sentences</i> : 3&#160;000&#160;phrases d’Amazon, Yelp et IMDb, licence CC&#160;BY&#160;4.0.</li>
-        <li>Mis de côté 20&#160;% des phrases (600) pour le test, avec une graine fixe pour pouvoir refaire l’expérience.</li>
-        <li>Entraîné une régression logistique sur la fréquence des mots et des groupes de lettres (TF-IDF).</li>
-        <li>Comparé le résultat à un modèle naïf qui répond toujours la même classe.</li>
-        <li>Enregistré le modèle versionné <code>model-1.0.0.joblib</code>.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">Nous avons entraîné le modèle sur un jeu de données public de 3&#160;000&#160;phrases d’avis (Amazon, Yelp et IMDb). Un cinquième des phrases a été mis de côté pour le tester. Le modèle, une régression logistique sur la fréquence des mots, a été comparé à un modèle naïf qui répond toujours la même chose, puis enregistré avec un numéro de version.</p>
     </div>
     <div class="col">
       <h3>Résultat sur les 600&#160;phrases de test</h3>
@@ -392,55 +356,44 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
       <p class="small" style="margin-top:28px">Taille 1,1&#160;Mo et 46&#160;ms pour 500&#160;lignes, loin des limites du sujet (100&#160;Mo et 1&#160;s).</p>
     </div>
   </div>
-  <div class="route" data-step="2" aria-hidden="true"></div>
+  <div class="route" data-step="1" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 3 — API
      ================================================================ -->
-<section class="slide" data-title="Étape 3">
+<section class="slide" data-title="Étape 2">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">3</div>
+    <div class="num">2</div>
     <div><h2>L’API d’inférence</h2><p class="lead">Le modèle répond sur Internet et ne coûte rien quand personne ne l’appelle.</p></div>
   </div>
   <div class="step-body">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Écrit l’API FastAPI : <code>/health</code>, <code>/version</code>, <code>/predict</code>, <code>/metrics</code>.</li>
-        <li>Écrit 24&#160;tests automatiques : réponse correcte, entrée invalide (erreur 422), requête vide.</li>
-        <li>Emballé l’API dans une image Docker d’environ 380&#160;Mo, qui tourne sans droits administrateur.</li>
-        <li>Déployé l’image dans Azure Container Apps : 0,25&#160;processeur, 0,5&#160;Go de mémoire, de 0&#160;à 2&#160;copies selon le trafic.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">Nous avons placé le modèle derrière une petite API web qui reçoit des avis et renvoie leur sentiment. Elle est vérifiée par 24&#160;tests automatiques, emballée dans un conteneur Docker, puis hébergée sur Azure Container Apps, qui ajoute ou retire des copies selon le trafic, jusqu’à zéro.</p>
     </div>
     <figure class="col">
       <div class="frame"><img src="img/api-zero.jpg" alt="Portail Azure : la révision de l’API est à l’état Scaled to 0, avec 0 réplica"></div>
       <figcaption>Sans trafic, l’API redescend à 0&#160;copie (« Scaled to 0 ») et n’est pas facturée. Le premier appel la réveille en une quinzaine de secondes.</figcaption>
     </figure>
   </div>
-  <div class="route" data-step="3" aria-hidden="true"></div>
+  <div class="route" data-step="2" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 4 — PIPELINE
      ================================================================ -->
-<section class="slide" data-title="Étape 4">
+<section class="slide" data-title="Étape 3">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">4</div>
+    <div class="num">3</div>
     <div><h2>Le pipeline événementiel</h2><p class="lead">Aucun fichier perdu, aucun fichier traité deux fois.</p></div>
   </div>
   <div class="step-body">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Branché Event Grid sur le dossier <code>input/</code> : chaque nouveau fichier déclenche le <i>dispatcher</i>.</li>
-        <li>Le <i>dispatcher</i> valide le fichier ; s’il est invalide, il le copie dans <code>rejected/</code> avec le motif.</li>
-        <li>Un fichier valide devient un message dans une file d’attente.</li>
-        <li>Le <i>worker</i> lit la file, appelle l’API et enregistre le résultat.</li>
-        <li>Les trois fonctions tournent dans une seule Function App, sans aucune clé : elles s’identifient par identité managée.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">Dès qu’un fichier arrive dans le stockage, Azure prévient une première fonction qui le vérifie. Un fichier invalide est mis de côté avec la raison du refus ; un fichier valide devient un message dans une file d’attente. Une seconde fonction lit cette file, appelle l’API et enregistre le résultat. Aucune clé n’est utilisée : les services s’identifient entre eux.</p>
     </div>
     <div class="col">
       <h3>Les garanties</h3>
@@ -453,115 +406,66 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
       </table>
     </div>
   </div>
-  <div class="route" data-step="4" aria-hidden="true"></div>
+  <div class="route" data-step="3" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 5 — STOCKAGE ET TABLEAU DE BORD
      ================================================================ -->
-<section class="slide" data-title="Étape 5">
+<section class="slide" data-title="Étape 4">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">5</div>
+    <div class="num">4</div>
     <div><h2>Stockage et tableau de bord</h2><p class="lead">Chaque fichier traité apparaît tout seul à l’écran, sans action manuelle.</p></div>
   </div>
   <div class="step-body" style="grid-template-columns: 580px 1fr">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Enregistré le résultat complet de chaque fichier en JSON dans <code>output/</code>.</li>
-        <li>Enregistré un résumé par fichier dans Cosmos DB, en offre gratuite.</li>
-        <li>Ajouté la fonction <code>/api/recent</code> : les 20&#160;derniers résultats, lisibles seulement depuis notre site.</li>
-        <li>Publié une page web avec un tableau et deux graphiques, actualisée toutes les 30&#160;s.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">Chaque résultat est enregistré deux fois : le détail complet dans le stockage, et un résumé dans une base Cosmos DB. Une page web lit les vingt derniers résumés et les affiche dans un tableau et deux graphiques, mis à jour toutes les 30&#160;secondes.</p>
     </div>
     <figure class="col">
       <div class="frame"><img src="img/dashboard.jpg" alt="Tableau de bord : 9 fichiers traités, 152 avis, part d’avis négatifs par fichier, latence et tableau des dernières inférences"></div>
       <figcaption>Le tableau de bord en ligne : nombre de fichiers et d’avis, part d’avis négatifs par fichier, durée de traitement.</figcaption>
     </figure>
   </div>
-  <div class="route" data-step="5" aria-hidden="true"></div>
-</section>
-
-<!-- ================================================================
-     ÉTAPE 6 — INFRASTRUCTURE AZURE
-     ================================================================ -->
-<section class="slide" data-title="Étape 6">
-  <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
-  <div class="step-head">
-    <div class="num">6</div>
-    <div><h2>L’infrastructure Azure</h2><p class="lead">Chaque limite du compte étudiant a imposé un choix précis.</p></div>
-  </div>
-  <div class="step-body" style="grid-template-columns: 640px 1fr">
-    <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Relevé les 5&#160;régions autorisées et retenu <b>germanywestcentral</b> : autorisée, compatible avec Functions Flex, et Cosmos DB y a été accepté du premier coup.</li>
-        <li>Créé Cosmos DB en premier, car c’est le service le plus souvent refusé.</li>
-        <li>Créé tout le reste avec un script commenté, <code>01-setup.sh</code>.</li>
-        <li>Accordé les droits une seule fois, avec <code>02-roles.sh</code>.</li>
-      </ol>
-    </div>
-    <div class="col">
-      <h3>Limite du compte et notre solution</h3>
-      <table style="font-size:25px">
-        <tr><th style="width:44%; font-size:25px">Limite du compte</th><th style="font-size:25px">Notre solution</th></tr>
-        <tr><td>Pas de droits d’administration</td><td>Identité managée et connexion OIDC depuis GitHub</td></tr>
-        <tr><td>Registre ACR indisponible</td><td>Image publiée sur GitHub Container Registry, gratuit</td></tr>
-        <tr><td>Static Web Apps hors région</td><td>Site web statique dans le stockage Blob</td></tr>
-        <tr><td>Un seul environnement Container Apps</td><td>Un seul environnement, partagé</td></tr>
-        <tr><td>Crédit de 100&#160;$ partagé entre les cours</td><td>Budget de 25&#160;$ avec alertes, journaux plafonnés à 0,2&#160;Go par jour</td></tr>
-      </table>
-    </div>
-  </div>
-  <div class="route" data-step="6" aria-hidden="true"></div>
+  <div class="route" data-step="4" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 7 — CI/CD
      ================================================================ -->
-<section class="slide" data-title="Étape 7">
+<section class="slide" data-title="Étape 5">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">7</div>
+    <div class="num">5</div>
     <div><h2>Intégration et déploiement continus</h2><p class="lead">Chaque modification est testée, puis déployée après accord, sans aucun mot de passe stocké.</p></div>
   </div>
   <div class="step-body" style="grid-template-columns: 660px 1fr">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Workflow <code>ci.yml</code> : vérification du style, 24&#160;tests, construction et publication de l’image.</li>
-        <li>Workflow <code>deploy.yml</code> : GitHub se connecte à Azure par OIDC, sans clé ni mot de passe.</li>
-        <li>Environnement <code>production</code> : un membre de l’équipe doit approuver chaque déploiement.</li>
-        <li>Dernière vérification automatique : <code>/version</code> doit renvoyer le commit déployé.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">À chaque modification envoyée sur GitHub, le code est vérifié et testé, puis une nouvelle image est construite. Le déploiement attend l’accord d’un membre de l’équipe, se connecte à Azure sans mot de passe, met tout à jour, puis vérifie que la bonne version répond.</p>
     </div>
     <figure class="col">
       <div class="frame"><img src="img/deploy.jpg" alt="GitHub Actions : déploiement réussi avec connexion OIDC, mise à jour de l’API, des Functions et du tableau de bord, puis test final"></div>
       <figcaption>Un déploiement réussi : connexion OIDC, API, Functions, tableau de bord, puis test final.</figcaption>
     </figure>
   </div>
-  <div class="route" data-step="7" aria-hidden="true"></div>
+  <div class="route" data-step="5" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 8 — OBSERVABILITÉ
      ================================================================ -->
-<section class="slide" data-title="Étape 8">
+<section class="slide" data-title="Étape 6">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">8</div>
+    <div class="num">6</div>
     <div><h2>Mesurer et alerter</h2><p class="lead">Une erreur dans le pipeline déclenche un e-mail en moins de 15&#160;minutes.</p></div>
   </div>
   <div class="step-body" style="grid-template-columns: 600px 1fr">
     <div class="col">
-      <h3>Ce que nous avons fait</h3>
-      <ol class="did">
-        <li>Envoyé les traces de l’API et des fonctions vers Application Insights (OpenTelemetry).</li>
-        <li>Créé 7&#160;métriques : fichiers traités, avis, latence, erreurs, rejets…</li>
-        <li>Écrit 3&#160;requêtes KQL : traitements par heure, 5&#160;fichiers les plus lents, codes HTTP.</li>
-        <li>Configuré une alerte, vérifiée toutes les 15&#160;min, qui envoie un e-mail en cas d’erreur.</li>
-      </ol>
+      <h3>En résumé</h3>
+      <p class="summary">Toutes les traces de l’API et des fonctions sont envoyées dans Application Insights. Nous y suivons sept mesures (fichiers traités, temps de réponse, erreurs, rejets…), trois requêtes d’analyse, et une alerte qui envoie un e-mail dès qu’une erreur apparaît.</p>
     </div>
     <div class="col" style="display:grid; grid-template-rows: 1.3fr 1fr auto; gap: 16px">
       <figure><div class="frame"><img src="img/metriques.jpg" alt="Requête KQL sur les métriques personnalisées : pipeline.errors 10 (KeyError), pipeline.rejected 6"></div></figure>
@@ -569,16 +473,16 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
       <figcaption>En haut, les métriques après la démonstration ; en bas, l’alerte déclenchée à 16:18.</figcaption>
     </div>
   </div>
-  <div class="route" data-step="8" aria-hidden="true"></div>
+  <div class="route" data-step="6" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 9 — DÉMONSTRATION
      ================================================================ -->
-<section class="slide" data-title="Étape 9">
+<section class="slide" data-title="Étape 7">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">9</div>
+    <div class="num">7</div>
     <div><h2>La démonstration</h2><p class="lead">Le 24&#160;novembre à 16:16:58, trois dépôts : les trois chemins ont fonctionné.</p></div>
   </div>
   <div class="step-body" style="grid-template-columns: 1fr 1fr 1fr; gap: 40px">
@@ -590,7 +494,7 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
     <figure class="col">
       <h3>Fichier invalide</h3>
       <div class="frame"><img src="img/rejet.jpg" alt="Motif de rejet : extension not allowed (expected .txt)"></div>
-      <figcaption>Un <code>.csv</code> est copié dans <code>rejected/</code> avec son motif : extension non autorisée.</figcaption>
+      <figcaption>Un fichier .csv est mis de côté avec la raison du refus : extension non autorisée.</figcaption>
     </figure>
     <figure class="col">
       <h3>Message malformé</h3>
@@ -598,16 +502,16 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
       <figcaption>Après 5&#160;essais, il arrive dans la file « poison » à 16:17:57&#160;; l’alerte suit à 16:18.</figcaption>
     </figure>
   </div>
-  <div class="route" data-step="9" aria-hidden="true"></div>
+  <div class="route" data-step="7" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
      ÉTAPE 10 — BONUS
      ================================================================ -->
-<section class="slide" data-title="Étape 10">
+<section class="slide" data-title="Étape 8">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
   <div class="step-head">
-    <div class="num">10</div>
+    <div class="num">8</div>
     <div><h2>Les deux bonus</h2><p class="lead">Le système tient une rafale de 100&#160;fichiers et se reconstruit en une commande.</p></div>
   </div>
   <div class="step-body" style="grid-template-columns: 1fr 1fr; gap: 96px">
@@ -622,35 +526,13 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
     <div class="col">
       <h3>Infrastructure décrite en code (Bicep)</h3>
       <div class="facts">
-        <div class="fact"><span class="v">29</span><span class="k">ressources Azure décrites dans un seul fichier, <code>main.bicep</code>.</span></div>
+        <div class="fact"><span class="v">29</span><span class="k">ressources Azure décrites dans un seul fichier Bicep.</span></div>
         <div class="fact"><span class="v">0 / 0</span><span class="k">ressource à créer ou à supprimer : le fichier décrit exactement ce qui tourne.</span></div>
-        <div class="fact"><span class="v">2 min</span><span class="k">pour tout redéployer avec <code>infra/bicep/deploy.sh</code>, pipeline retesté juste après.</span></div>
+        <div class="fact"><span class="v">2 min</span><span class="k">pour tout redéployer en une seule commande, pipeline retesté juste après.</span></div>
       </div>
     </div>
   </div>
-  <div class="route" data-step="10" aria-hidden="true"></div>
-</section>
-
-<!-- ================================================================
-     DIFFICULTÉS
-     ================================================================ -->
-<section class="slide" data-title="Difficultés">
-  <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
-  <div class="slide-title">
-    <h2>Six obstacles réels, six corrections</h2>
-    <p class="lead">Chacun est documenté dans le README, avec sa solution.</p>
-  </div>
-  <div class="content" style="top:300px">
-    <table>
-      <tr><th style="width:31%">Ce qui s’est passé</th><th style="width:32%">Cause</th><th>Correction</th></tr>
-      <tr><td>Connexion à Azure refusée</td><td>Double authentification obligatoire</td><td>Connexion ciblée sur le bon annuaire, dans le navigateur</td></tr>
-      <tr><td>Premier déploiement refusé par Azure</td><td>GitHub envoie son identité avec des numéros de compte</td><td>Seconde règle de confiance OIDC, ajoutée aussi aux scripts</td></tr>
-      <tr><td>Mise à jour de l’API refusée</td><td>Environnement Container Apps simplifié</td><td>Option retirée ; la version est vérifiée par <code>/version</code></td></tr>
-      <tr><td>Tableau de bord sans données</td><td>Adresse des Functions lue au mauvais endroit</td><td>Lecture corrigée, contrôle ajouté au déploiement</td></tr>
-      <tr><td>Métriques manquantes</td><td>Instance mise en pause avant l’envoi</td><td>Envoi forcé à la fin de chaque traitement</td></tr>
-      <tr><td>Déploiement sans image</td><td>Commit de documentation non construit</td><td>Le déploiement reprend la dernière image construite</td></tr>
-    </table>
-  </div>
+  <div class="route" data-step="8" aria-hidden="true"></div>
 </section>
 
 <!-- ================================================================
@@ -684,34 +566,9 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
 <!-- ================================================================
      BILAN
      ================================================================ -->
-<section class="slide dark" data-title="Bilan">
+<section class="slide dark" data-title="Merci">
   <div class="chrome"><span>Pipeline ML événementiel sur Azure</span><span class="pg"></span></div>
-  <div class="slide-title">
-    <h2>Tout le socle fonctionne, avec deux bonus</h2>
-  </div>
-  <div class="content" style="top:290px">
-    <div class="two" style="gap: 96px">
-      <div class="col">
-        <h3>Livré</h3>
-        <ol class="did">
-          <li>Modèle versionné et API qui redescend à 0&#160;copie</li>
-          <li>Pipeline avec validation, file, reprises et file « poison »</li>
-          <li>Cosmos DB et tableau de bord automatique</li>
-          <li>Métriques, requêtes KQL, alerte déclenchée</li>
-          <li>Déploiement continu sans secret, avec approbation</li>
-          <li>Bonus : test de charge et infrastructure en Bicep</li>
-        </ol>
-      </div>
-      <div class="col">
-        <h3>Ce qui reste</h3>
-        <ol class="did">
-          <li>Relever le coût réel au 15<sup>e</sup>&#160;jour</li>
-          <li>Tout supprimer dans les 48&#160;h après la soutenance, captures à l’appui</li>
-        </ol>
-        <p style="margin-top:72px; font-family: var(--display); font-weight: 800; font-stretch: 78%; font-size: 76px; line-height:1; color: var(--paper)">Merci. Vos questions&#160;?</p>
-      </div>
-    </div>
-  </div>
+  <div class="thanks"><h1>Merci pour votre attention</h1></div>
 </section>
 
 </main>
@@ -723,9 +580,9 @@ button.nav:focus-visible { outline: 3px solid var(--amber); outline-offset: -6px
 
 <script>
 /* === ROUTE BUILDER ==================================================
-   Construit le parcours des 10 étapes sur chaque diapositive qui en a un.
+   Construit le parcours des 8 étapes sur chaque diapositive qui en a un.
    data-step = étape en cours (0 = aucune : toutes à venir). */
-const STEPS = ['Cadrage', 'Modèle', 'API', 'Pipeline', 'Tableau', 'Azure', 'CI/CD', 'Mesures', 'Démo', 'Bonus'];
+const STEPS = ['Modèle', 'API', 'Pipeline', 'Tableau', 'CI/CD', 'Mesures', 'Démo', 'Bonus'];
 document.querySelectorAll('.route').forEach(route => {
   const now = Number(route.dataset.step);
   const items = STEPS.map((name, i) => {
