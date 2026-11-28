@@ -106,7 +106,7 @@ infra/bicep/  main.bicep, main.bicepparam, deploy.sh (bonus IaC : tout le socle 
 samples/      fichiers de démonstration valides et invalides
 loadtest/     burst.sh (rafale de fichiers), locustfile.py, analysis.kql (bonus test de charge)
 .github/workflows/  ci.yml, deploy.yml
-docs/         architecture.png, kql-queries.kql, cost-report.md, time-log.md, demo-script.md, screenshots/
+docs/         presentation/ (support de soutenance HTML), architecture.png, kql-queries.kql, cost-report.md, time-log.md, demo-script.md, screenshots/
 ```
 
 ## 5. Développement local
